@@ -1,0 +1,11 @@
+Time|Case|Host|User|SourceIP|Event|Command|Expected
+20:00:01|TRUSTED_COMPROMISE|linux-admin-02|admin|10.0.0.30|SSH_FAILED|-|malicious
+20:00:05|TRUSTED_COMPROMISE|linux-admin-02|admin|10.0.0.30|SSH_FAILED|-|malicious
+20:00:09|TRUSTED_COMPROMISE|linux-admin-02|admin|10.0.0.30|SSH_SUCCESS|-|malicious
+20:00:15|TRUSTED_COMPROMISE|linux-admin-02|admin|10.0.0.30|COMMAND|id|malicious
+21:00:01|BENIGN_TRUSTED_TYPO|linux-admin-02|admin|10.0.0.30|SSH_FAILED|-|benign
+21:00:05|BENIGN_TRUSTED_TYPO|linux-admin-02|admin|10.0.0.30|SSH_FAILED|-|benign
+21:00:09|BENIGN_TRUSTED_TYPO|linux-admin-02|admin|10.0.0.30|SSH_SUCCESS|-|benign
+21:00:15|BENIGN_TRUSTED_TYPO|linux-admin-02|admin|10.0.0.30|COMMAND|id|benign
+20:00:20|TRUSTED_COMPROMISE|linux-admin-02|admin|10.0.0.30|COMMAND|sudo -l|malicious
+21:00:20|BENIGN_TRUSTED_TYPO|linux-admin-02|admin|10.0.0.30|COMMAND|id|benign

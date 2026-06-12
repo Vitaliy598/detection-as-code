@@ -1,0 +1,2 @@
+Host|User|SourceIP|Domain|ScriptPath|PersistencePath
+linux-dev-03|developer|10.0.0.70|internal.company.local|/home/developer/.local/startup.sh|/home/developer/.profile
