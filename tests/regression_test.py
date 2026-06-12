@@ -1,9 +1,9 @@
 from pathlib import Path
 import sys
 
-home = Path.home()
-expected_file = home / "regression_expected.psv"
-actual_file = home / "correlation_all_tuned.psv"
+project_root = Path(__file__).resolve().parent.parent
+expected_file = project_root / "tests" / "regression_expected.psv"
+actual_file = project_root / "build" / "correlation_all_tuned.psv"
 
 expected = {}
 with expected_file.open() as file:

