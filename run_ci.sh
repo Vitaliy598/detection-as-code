@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "[1/3] Schema validation"
+echo "[1/4] Schema validation"
 
 awk -f tests/schema_guard_ci.awk \
   config/field_aliases.psv \
   data/schema_valid.psv
 
-echo "[2/3] Field quality validation"
+echo "[2/4] Field quality validation"
 
 errors_file="$(mktemp)"
 trap 'rm -f "$errors_file"' EXIT
@@ -23,7 +23,12 @@ fi
 
 echo "Field quality validation passed"
 
-echo "[3/3] Detection regression tests"
+echo "[3/4] Metadata validation"
+
+./tests/metadata_check.sh
+
+echo "[4/4] Detection regression tests"
+
 
 rm -rf build
 mkdir -p build
