@@ -1,0 +1,46 @@
+id: DET-LINUX-001
+title: Linux Suspicious Fileless Execution
+status: experimental
+severity: high
+confidence: medium
+
+description: >
+  Detects suspicious Linux command patterns where remote content or encoded
+  content may be executed through shell interpreters without a traditional
+  saved executable payload.
+
+data_sources:
+  - Linux process execution logs
+  - Command line telemetry
+  - Network/download telemetry
+
+required_fields:
+  - Time
+  - Host
+  - User
+  - SourceIP
+  - Command
+
+detection_logic:
+  - Detect curl or wget delivery
+  - Detect pipe-to-shell execution patterns
+  - Detect encoded execution patterns
+  - Correlate multiple signals within the configured time window
+
+mitre_attack:
+  - tactic: Execution
+    technique: Command and Scripting Interpreter
+  - tactic: Defense Evasion
+    technique: Obfuscated Files or Information
+
+false_positives:
+  - Approved automation scripts
+  - Developer setup scripts
+  - Internal maintenance activity
+
+testing:
+  regression_cases:
+    - FILELESS
+    - ENCODED_FILELESS
+    - COMMAND_SUBSTITUTION
+    - BENIGN_REMOTE_SCRIPT
