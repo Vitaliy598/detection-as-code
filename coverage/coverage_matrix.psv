@@ -1,0 +1,11 @@
+Technique|Case|CoverageStatus|DetectionRule|Tested|Notes
+Command and Scripting Interpreter|FILELESS|COVERED|DET-LINUX-001|yes|curl pipe-to-shell detected
+Command and Scripting Interpreter|COMMAND_SUBSTITUTION|COVERED|DET-LINUX-001|yes|bash command substitution detected
+Obfuscated Files or Information|ENCODED_FILELESS|COVERED|DET-LINUX-001|yes|encoded execution detected
+Persistence|ATTACK|COVERED|DET-LINUX-001|yes|cron persistence correlated
+Persistence|EVASION|COVERED|DET-LINUX-001|yes|profile persistence correlated
+Valid Accounts|TRUSTED_COMPROMISE|COVERED|auth-correlation|yes|trusted account compromise detected
+Approved Remote Script|BENIGN_REMOTE_SCRIPT|COVERED|tuning|yes|benign remote script handled
+Endpoint EDR Compromise|EDR_COMPROMISE|NOT_COVERED|none|no|requires EDR-specific detection
+Container Escape|CONTAINER_ESCAPE|NOT_COVERED|none|no|future Linux/container module
+Cloud Identity Abuse|CLOUD_IDENTITY_ABUSE|NOT_COVERED|none|no|future cloud identity module
