@@ -1,0 +1,9 @@
+Action|Priority|Reason
+Revoke active sessions|P1|Suspicious session from 203.0.113.210 is still active
+Reset user password|P1|Account compromise confirmed
+Revoke refresh tokens|P1|Attacker may keep access through existing tokens
+Remove external inbox rule|P1|Mailbox forwarding to external address confirmed
+Block source IP|P2|Source IP used for suspicious login and mailbox access
+Review mailbox access|P2|Mail read, search, and attachment download observed
+Require MFA re-registration|P2|MFA approval occurred after denial
+Notify user and management|P2|User account and mailbox were compromised

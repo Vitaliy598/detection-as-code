@@ -1,0 +1,5 @@
+Time|User|SourceIP|Activity|Target|Result
+09:13:00|victim@company.com|203.0.113.210|MAIL_READ|Inbox|success
+09:14:00|victim@company.com|203.0.113.210|MAIL_SEARCH|invoice,password,bank|success
+09:15:00|victim@company.com|203.0.113.210|ATTACHMENT_DOWNLOAD|invoice_june.pdf|success
+09:40:00|admin@company.com|10.0.0.20|MAIL_READ|Ticket queue|success

@@ -1,0 +1,11 @@
+Category|Status|Evidence
+Visible|Confirmed|MFA denied then approved from same source IP
+Visible|Confirmed|Successful login from RU / 203.0.113.210
+Visible|Confirmed|External inbox forwarding rule created
+Visible|Confirmed|Mailbox read/search/download observed
+Visible|Confirmed|Suspicious session still active
+Inferred|High confidence|Account and mailbox compromise
+Missing|Needs follow-up|Exact user confirmation about MFA approval
+Missing|Needs follow-up|Full mailbox access scope
+Missing|Needs follow-up|Whether downloaded attachment contained sensitive data
+Missing|Needs follow-up|IP/domain reputation enrichment

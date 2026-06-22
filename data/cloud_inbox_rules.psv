@@ -1,0 +1,3 @@
+RuleID|User|CreatedTime|CreatedByIP|RuleName|ForwardTo|Enabled|Action
+RULE-9001|victim@company.com|09:12:00|203.0.113.210|Forward all invoices|external.attacker@example.net|true|forward
+RULE-1001|admin@company.com|09:35:00|10.0.0.20|Ticket automation|support-queue@company.com|true|forward_internal
