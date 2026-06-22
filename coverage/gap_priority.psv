@@ -1,0 +1,4 @@
+Gap|BusinessExposure|AttackLikelihood|DetectionValue|DataReadiness|ImplementationEffort|Notes
+EDR_COMPROMISE|5|4|5|2|4|Needs EDR telemetry and endpoint-specific logic
+CONTAINER_ESCAPE|3|3|4|1|5|Requires container logs and Linux/container module
+CLOUD_IDENTITY_ABUSE|5|5|5|3|3|Very common SOC/MDR scenario, needs cloud identity logs

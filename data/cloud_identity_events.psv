@@ -1,0 +1,13 @@
+Time|Case|User|SourceIP|Country|Event|Result|Detail|Expected
+09:00:01|BENIGN_LOGIN|alice@company.com|10.0.0.10|ES|LOGIN_SUCCESS|success|known device|benign
+09:05:00|CLOUD_IDENTITY_ABUSE|victim@company.com|203.0.113.210|RU|LOGIN_FAILED|failure|invalid password|malicious
+09:06:00|CLOUD_IDENTITY_ABUSE|victim@company.com|203.0.113.210|RU|MFA_DENIED|failure|user denied push|malicious
+09:07:00|CLOUD_IDENTITY_ABUSE|victim@company.com|203.0.113.210|RU|MFA_APPROVED|success|push approved after denial|malicious
+09:08:00|CLOUD_IDENTITY_ABUSE|victim@company.com|203.0.113.210|RU|LOGIN_SUCCESS|success|new country and new IP|malicious
+09:12:00|CLOUD_IDENTITY_ABUSE|victim@company.com|203.0.113.210|RU|INBOX_RULE_CREATED|success|forward mail to external address|malicious
+09:30:00|BENIGN_ADMIN|admin@company.com|10.0.0.20|ES|LOGIN_SUCCESS|success|known admin workstation|benign
+09:35:00|BENIGN_ADMIN|admin@company.com|10.0.0.20|ES|INBOX_RULE_CREATED|success|internal ticket automation|benign
+10:00:00|BENIGN_HELPDESK_RULE|helpdesk@company.com|10.0.0.30|ES|LOGIN_SUCCESS|success|known helpdesk workstation|benign
+10:03:00|BENIGN_HELPDESK_RULE|helpdesk@company.com|10.0.0.30|ES|INBOX_RULE_CREATED|success|internal forwarding to support queue|benign
+11:00:00|SUSPICIOUS_FORWARD_ONLY|user2@company.com|203.0.113.220|RU|LOGIN_SUCCESS|success|new country and new IP|malicious
+11:03:00|SUSPICIOUS_FORWARD_ONLY|user2@company.com|203.0.113.220|RU|INBOX_RULE_CREATED|success|forward mail to external address|malicious

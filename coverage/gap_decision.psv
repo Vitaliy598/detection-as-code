@@ -1,0 +1,4 @@
+Rank|Gap|Decision|Reason
+1|CLOUD_IDENTITY_ABUSE|NEXT_TO_BUILD|Highest risk, common SOC/MDR scenario, acceptable implementation effort
+2|EDR_COMPROMISE|LATER|High value but requires stronger EDR telemetry
+3|CONTAINER_ESCAPE|FUTURE_MODULE|Lower immediate relevance and high implementation effort
