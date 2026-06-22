@@ -11,3 +11,7 @@ Time|Case|User|SourceIP|Country|Event|Result|Detail|Expected
 10:03:00|BENIGN_HELPDESK_RULE|helpdesk@company.com|10.0.0.30|ES|INBOX_RULE_CREATED|success|internal forwarding to support queue|benign
 11:00:00|SUSPICIOUS_FORWARD_ONLY|user2@company.com|203.0.113.220|RU|LOGIN_SUCCESS|success|new country and new IP|malicious
 11:03:00|SUSPICIOUS_FORWARD_ONLY|user2@company.com|203.0.113.220|RU|INBOX_RULE_CREATED|success|forward mail to external address|malicious
+12:00:00|BENIGN_APPROVED_EXTERNAL_FORWARD|service@company.com|10.0.0.40|ES|LOGIN_SUCCESS|success|known automation host|benign
+12:02:00|BENIGN_APPROVED_EXTERNAL_FORWARD|service@company.com|10.0.0.40|ES|INBOX_RULE_CREATED|success|forward mail to external address approved business workflow|benign
+13:00:00|TRUSTED_USER_SUSPICIOUS_CHAIN|service@company.com|10.0.0.40|ES|LOGIN_SUCCESS|success|new country and new IP|malicious
+13:03:00|TRUSTED_USER_SUSPICIOUS_CHAIN|service@company.com|10.0.0.40|ES|INBOX_RULE_CREATED|success|forward mail to external address approved business workflow|malicious
