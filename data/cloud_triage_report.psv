@@ -1,0 +1,10 @@
+Field|Value
+AlertID|ALERT-1001
+Verdict|CONFIRMED_ACCOUNT_AND_MAILBOX_COMPROMISE
+Severity|HIGH
+User|victim@company.com
+SourceIP|203.0.113.210
+Evidence|MFA denied then approved, suspicious login from RU, external inbox forwarding rule, mailbox read/search/download, active suspicious session
+Impact|Mailbox access confirmed, attachment downloaded, external forwarding enabled
+ImmediateActions|Revoke sessions, reset password, revoke refresh tokens, remove forwarding rule
+FollowUpActions|Review mailbox access, block source IP, require MFA re-registration, notify user and management

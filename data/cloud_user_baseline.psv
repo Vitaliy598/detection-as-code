@@ -1,0 +1,4 @@
+User|KnownCountry|KnownSourceIP|KnownDevice|MFAExpected
+victim@company.com|ES|10.0.0.55|WIN-LAPTOP-22|yes
+alice@company.com|ES|10.0.0.10|WIN-LAPTOP-10|yes
+admin@company.com|ES|10.0.0.20|ADMIN-WS-01|yes
