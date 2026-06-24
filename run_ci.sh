@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "[1/11] Schema validation"
+echo "[1/12] Schema validation"
 
 awk -f tests/schema_guard_ci.awk \
   config/field_aliases.psv \
   data/schema_valid.psv
 
-echo "[2/11] Field quality validation"
+echo "[2/12] Field quality validation"
 
 errors_file="$(mktemp)"
 trap 'rm -f "$errors_file"' EXIT
@@ -23,39 +23,43 @@ fi
 
 echo "Field quality validation passed"
 
-echo "[3/11] Metadata validation"
+echo "[3/12] Metadata validation"
 
 ./tests/metadata_check.sh
 
-echo "[4/11] Coverage report"
+echo "[4/12] Coverage report"
 
 ./tests/coverage_report.sh | column -s'|' -t
 
-echo "[5/11] Cloud identity detection test"
+echo "[5/12] Cloud identity detection test"
 
 ./tests/cloud_identity_test.sh
 
-echo "[6/11] SIEM PowerShell download correlation test"
+echo "[6/12] SIEM PowerShell download correlation test"
 
 ./tests/siem_ps_download_test.sh
 
-echo "[7/11] Network payload beacon correlation test"
+echo "[7/12] Network payload beacon correlation test"
 
 ./tests/network_payload_beacon_test.sh
 
-echo "[8/11] Linux SSH sudo cron correlation test"
+echo "[8/12] Linux SSH sudo cron correlation test"
 
 ./tests/linux_ssh_sudo_cron_test.sh
 
-echo "[9/11] Sigma KQL Splunk conversion files test"
+echo "[9/12] Sigma KQL Splunk conversion files test"
 
 ./tests/conversion_files_test.sh
 
-echo "[10/11] Detection review checklist test"
+echo "[10/12] Detection review checklist test"
 
 ./tests/detection_review_check.sh
 
-echo "[11/11] Detection regression tests"
+echo "[11/12] Capstone artifact test"
+
+./tests/capstone_artifact_test.sh
+
+echo "[12/12] Detection regression tests"
 
 
 

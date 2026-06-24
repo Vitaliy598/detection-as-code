@@ -1,0 +1,19 @@
+Field|Value
+IncidentID|CAPSTONE-001
+Scenario|Network payload download followed by beaconing
+PrimaryDetection|PAYLOAD_DOWNLOAD_PLUS_BEACONING
+Severity|HIGH
+Host|win-22
+User|user1
+Domain|cdn-security-update.com
+DestinationIP|203.0.113.88
+Evidence1|HTTP payload.ps1 download
+Evidence2|Three /beacon requests
+Evidence3|Same Host/User/Domain/IP
+Evidence4|Beaconing within 85 seconds
+LikelyThreat|Possible C2 staging or malware callback
+InitialVerdict|Confirmed suspicious network behavior
+RecommendedAction1|Isolate host win-22
+RecommendedAction2|Block destination IP and domain
+RecommendedAction3|Collect process/network timeline from EDR
+RecommendedAction4|Check file execution and persistence on host
