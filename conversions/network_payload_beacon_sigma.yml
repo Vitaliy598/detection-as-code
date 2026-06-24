@@ -1,0 +1,32 @@
+title: Network Payload Download Or Beacon Indicator
+id: 9f0a7d2e-9c4a-4f41-9d7a-network-payload-beacon
+status: test
+description: Detects network indicators related to payload download or beaconing. Full correlation requires SIEM logic.
+author: Vitaliy
+date: 2026-06-24
+logsource:
+  category: proxy
+  product: network
+detection:
+  selection_payload:
+    url|contains:
+      - 'payload.ps1'
+  selection_beacon:
+    url|contains:
+      - '/beacon'
+  condition: selection_payload or selection_beacon
+fields:
+  - host.name
+  - user.name
+  - url.full
+  - url.domain
+  - destination.ip
+falsepositives:
+  - Internal testing scripts
+  - Security tools downloading test payloads
+  - Monitoring systems using beacon-like paths
+level: medium
+tags:
+  - attack.command_and_control
+  - attack.t1105
+  - attack.t1071
