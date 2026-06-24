@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "[1/7] Schema validation"
+echo "[1/8] Schema validation"
 
 awk -f tests/schema_guard_ci.awk \
   config/field_aliases.psv \
   data/schema_valid.psv
 
-echo "[2/7] Field quality validation"
+echo "[2/8] Field quality validation"
 
 errors_file="$(mktemp)"
 trap 'rm -f "$errors_file"' EXIT
@@ -23,23 +23,27 @@ fi
 
 echo "Field quality validation passed"
 
-echo "[3/7] Metadata validation"
+echo "[3/8] Metadata validation"
 
 ./tests/metadata_check.sh
 
-echo "[4/7] Coverage report"
+echo "[4/8] Coverage report"
 
 ./tests/coverage_report.sh | column -s'|' -t
 
-echo "[5/7] Cloud identity detection test"
+echo "[5/8] Cloud identity detection test"
 
 ./tests/cloud_identity_test.sh
 
-echo "[6/7] SIEM PowerShell download correlation test"
+echo "[6/8] SIEM PowerShell download correlation test"
 
 ./tests/siem_ps_download_test.sh
 
-echo "[7/7] Detection regression tests"
+echo "[7/8] Network payload beacon correlation test"
+
+./tests/network_payload_beacon_test.sh
+
+echo "[8/8] Detection regression tests"
 
 
 

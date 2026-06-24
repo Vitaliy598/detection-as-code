@@ -1,0 +1,9 @@
+Time|Host|User|EventType|Domain|DestinationIP|URL|BytesOut|BytesIn|Case
+15:00:01|win-01|alice|DNS|updates.microsoft.com|13.107.4.50|-|0|0|BENIGN_UPDATES
+15:00:05|win-01|alice|HTTP|updates.microsoft.com|13.107.4.50|https://updates.microsoft.com/check|300|2048|BENIGN_UPDATES
+15:10:00|win-22|user1|DNS|cdn-security-update.com|203.0.113.88|-|0|0|NETWORK_ATTACK
+15:10:05|win-22|user1|HTTP|cdn-security-update.com|203.0.113.88|http://cdn-security-update.com/payload.ps1|500|12000|NETWORK_ATTACK
+15:10:30|win-22|user1|HTTP|cdn-security-update.com|203.0.113.88|http://cdn-security-update.com/beacon|150|80|NETWORK_ATTACK
+15:11:00|win-22|user1|HTTP|cdn-security-update.com|203.0.113.88|http://cdn-security-update.com/beacon|148|82|NETWORK_ATTACK
+15:11:30|win-22|user1|HTTP|cdn-security-update.com|203.0.113.88|http://cdn-security-update.com/beacon|151|79|NETWORK_ATTACK
+15:20:00|win-30|svc_backup|HTTP|backup.company.local|10.0.0.80|https://backup.company.local/upload|500000|2000|BENIGN_BACKUP
