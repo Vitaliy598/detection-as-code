@@ -1,0 +1,11 @@
+Concept|LabField|SigmaField|KQLField|SplunkField|Meaning
+timestamp|Time|@timestamp|TimeGenerated|_time|event time
+host|Host|host.name|DeviceName|host|device name
+user|User|user.name|AccountName|user|account/user
+event_type|EventType|event.category|EventType|event_type|DNS or HTTP event
+domain|Domain|dns.question.name / url.domain|RemoteUrl|url_domain|requested domain
+destination_ip|DestinationIP|destination.ip|RemoteIP|dest_ip|external destination IP
+url|URL|url.full|RemoteUrl|url|full requested URL
+bytes_out|BytesOut|source.bytes|SentBytes|bytes_out|bytes sent from host
+bytes_in|BytesIn|destination.bytes|ReceivedBytes|bytes_in|bytes received by host
+case|Case|test.case|Case|case|lab expected case

@@ -1,0 +1,26 @@
+# Network payload download + beaconing correlation
+# Purpose: detect possible C2/staging behavior
+# Logic: payload.ps1 download + >=3 beacon requests by same host/user/domain/IP within 120 seconds after payload download
+
+index=network sourcetype=proxy url="*payload.ps1*"
+| eval payload_time=_time
+| rename url as payload_url
+| fields payload_time payload_url host user url_domain dest_ip
+| join type=inner host user url_domain dest_ip [
+    search index=network sourcetype=proxy url="*/beacon*"
+    | eval beacon_time=_time
+    | rename url as beacon_url
+    | fields beacon_time beacon_url host user url_domain dest_ip
+  ]
+| where beacon_time >= payload_time AND beacon_time <= payload_time + 120
+| stats
+    count as beacon_count
+    min(beacon_time) as first_beacon_time
+    max(beacon_time) as last_beacon_time
+    values(beacon_url) as beacon_urls
+  by payload_time payload_url host user url_domain dest_ip
+| where beacon_count >= 3
+| eval window_seconds = last_beacon_time - payload_time
+| eval severity="HIGH_ALERT"
+| eval reason="PAYLOAD_DOWNLOAD_PLUS_BEACONING"
+| table severity host user url_domain dest_ip reason payload_url beacon_urls payload_time first_beacon_time last_beacon_time window_seconds beacon_count

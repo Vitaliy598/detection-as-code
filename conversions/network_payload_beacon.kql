@@ -1,0 +1,49 @@
+// Network payload download + beaconing correlation
+// Purpose: detect possible C2/staging behavior
+// Logic: payload.ps1 download + >=3 beacon requests by same host/user/domain/IP within 120 seconds after payload download
+
+let PayloadEvents =
+NetworkEvents
+| where URL has "payload.ps1"
+| project
+    PayloadTime = TimeGenerated,
+    DeviceName,
+    AccountName,
+    Domain,
+    RemoteIP,
+    PayloadUrl = URL;
+
+let BeaconEvents =
+NetworkEvents
+| where URL has "/beacon"
+| project
+    BeaconTime = TimeGenerated,
+    DeviceName,
+    AccountName,
+    Domain,
+    RemoteIP,
+    BeaconUrl = URL;
+
+PayloadEvents
+| join kind=inner BeaconEvents on DeviceName, AccountName, Domain, RemoteIP
+| where BeaconTime between (PayloadTime .. PayloadTime + 120s)
+| summarize
+    BeaconCount = count(),
+    FirstBeaconTime = min(BeaconTime),
+    LastBeaconTime = max(BeaconTime)
+  by PayloadTime, DeviceName, AccountName, Domain, RemoteIP, PayloadUrl
+| where BeaconCount >= 3
+| extend WindowSeconds = datetime_diff("second", LastBeaconTime, PayloadTime)
+| project
+    Severity = "HIGH_ALERT",
+    DeviceName,
+    AccountName,
+    Domain,
+    RemoteIP,
+    Reason = "PAYLOAD_DOWNLOAD_PLUS_BEACONING",
+    PayloadUrl,
+    PayloadTime,
+    FirstBeaconTime,
+    LastBeaconTime,
+    WindowSeconds,
+    BeaconCount
