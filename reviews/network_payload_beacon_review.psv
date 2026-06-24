@@ -1,0 +1,11 @@
+CheckID|CheckName|Status|Reason
+DR-001|Detection goal is clear|PASS|Detect payload download followed by beaconing
+DR-002|Required fields are mapped|PASS|Field mapping exists for Time Host User Domain IP URL
+DR-003|Correlation key is defined|PASS|Host User Domain DestinationIP
+DR-004|Time window is justified|PASS|Beaconing must happen within 120 seconds after payload download
+DR-005|Benign cases are tested|PASS|BENIGN_UPDATES and BENIGN_BACKUP expected NO_ALERT
+DR-006|Attack case is tested|PASS|NETWORK_ATTACK expected HIGH_ALERT
+DR-007|Unexpected alerts are blocked|PASS|Expected test fails on unexpected severity
+DR-008|False positive notes exist|PASS|Sigma file includes falsepositives section
+DR-009|Severity is justified|PASS|Payload download plus beaconing indicates possible C2 staging
+DR-010|MITRE mapping exists|PASS|Sigma tags include command and control techniques
