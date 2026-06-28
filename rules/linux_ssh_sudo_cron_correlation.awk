@@ -113,7 +113,18 @@ END {
     s>=SUSPICIOUS_SUDO_THRESHOLD &&
     c>=CRON_PERSIST_THRESHOLD &&
     window<=CORRELATION_WINDOW_SECONDS) {
-      print "HIGH_ALERT",a[1],a[2],"reason=SSH_BRUTE_FORCE_SUCCESS_PLUS_SUDO_CRON","source_ip=" a[3],"failed_ssh=" f,"accepted_ssh=" ac,"suspicious_sudo=" s,"cron_persistence=" c,"window_seconds=" window,"case=" a[4]
-    }
+print "alert=HIGH_ALERT", \
+      "rule_id=LINUX_SSH_SUDO_CRON_CORRELATION", \
+      "severity=high", \
+      "user=" a[1], \
+      "source_ip=" a[2], \
+      "host=" a[3], \
+      "reason=SSH_BRUTE_FORCE_SUCCESS_PLUS_SUDO_CRON", \
+      "failed_ssh=" f, \
+      "accepted_ssh=" ac, \
+      "suspicious_sudo=" s, \
+      "cron_persistence=" c, \
+      "correlation_window_seconds=" window, \
+      "recommended_action=validate_account_activity_review_cron_and_check_source_ip_reputation"    }
   }
 }
