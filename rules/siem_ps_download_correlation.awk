@@ -50,8 +50,12 @@
 #   alert level, rule_id, severity, case_name, host, remote_ip,
 #   PowerShell event count, curl download count, correlation window, and recommended action
 BEGIN {
-  FS="|"
-  OFS="|"
+    FS="|"
+    OFS="|"
+
+    POWERSHELL_EVENT_THRESHOLD=2
+    CURL_DOWNLOAD_THRESHOLD=1
+    CORRELATION_WINDOW_SECONDS=600
 }
 
 function to_sec(t, a) {
@@ -84,8 +88,28 @@ END {
   for (key in ps) {
     window=last_ts[key]-first_ts[key]
 
-    if (key in curl && ps[key] >= 2 && window <= 600) {
-      print "HIGH_ALERT",key,"reason=SUSPICIOUS_PS_PLUS_DOWNLOAD","window_seconds=" window,"ps_events=" ps[key],"curl_download=" curl[key],"remote_ip=" remote[key],"case=" cases[key]
-    }
+    if (key in curl &&
+    ps[key] >= POWERSHELL_EVENT_THRESHOLD &&
+    curl[key] >= CURL_DOWNLOAD_THRESHOLD &&
+    window <= CORRELATION_WINDOW_SECONDS) {
+
+    split(key, parts, "|")
+case_name=parts[1]
+host=parts[2]
+user=cases[key]
+
+    print "alert=HIGH_ALERT", \
+          "rule_id=SIEM_POWERSHELL_DOWNLOAD_CORRELATION", \
+          "severity=high", \
+          "case_name=" case_name, \
+          "host=" host, \
+"user=" user, \
+          "remote_ip=" remote[key], \
+          "reason=SUSPICIOUS_POWERSHELL_PLUS_REMOTE_DOWNLOAD", \
+          "powershell_events=" ps[key], \
+          "curl_downloads=" curl[key], \
+          "correlation_window_seconds=" window, \
+          "recommended_action=review_command_line_parent_process_remote_ip_and_contain_host_if_confirmed"
+}
   }
 }
