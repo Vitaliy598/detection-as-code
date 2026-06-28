@@ -53,8 +53,17 @@
 #   alert level, rule_id, severity, case_name, user, source_ip,
 #   risk score, observed signals, and recommended action
 BEGIN {
-  FS="|"
-  OFS="|"
+    FS="|"
+    OFS="|"
+
+    HIGH_ALERT_THRESHOLD=8
+    MEDIUM_REVIEW_THRESHOLD=4
+
+    FAILED_LOGIN_SCORE=1
+    MFA_DENIED_SCORE=2
+    MFA_APPROVED_AFTER_DENIAL_SCORE=3
+    SUSPICIOUS_LOGIN_SUCCESS_SCORE=3
+    EXTERNAL_FORWARD_RULE_SCORE=4
 }
 
 {
@@ -83,15 +92,15 @@ END {
     src=parts[3]
 
     score=0
-    if (failed[key]) score+=1
-    if (denied[key]) score+=2
-    if (approved_after_denial[key]) score+=3
-    if (success[key]) score+=3
-    if (forward[key]) score+=4
+    if (failed[key]) score+=FAILED_LOGIN_SCORE
+if (denied[key]) score+=MFA_DENIED_SCORE
+if (approved_after_denial[key]) score+=MFA_APPROVED_AFTER_DENIAL_SCORE
+if (success[key]) score+=SUSPICIOUS_LOGIN_SUCCESS_SCORE
+if (forward[key]) score+=EXTERNAL_FORWARD_RULE_SCORE
 
     severity="NO_ALERT"
-    if (score>=8) severity="HIGH_ALERT"
-    else if (score>=4) severity="MEDIUM_REVIEW"
+    if (score>=HIGH_ALERT_THRESHOLD) severity="HIGH_ALERT"
+else if (score>=MEDIUM_REVIEW_THRESHOLD) severity="MEDIUM_REVIEW"
 
     print severity,case_name,user,src,"score=" score,signals[key]
   }
