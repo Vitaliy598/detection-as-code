@@ -55,7 +55,16 @@
 #   suspicious sudo count, cron persistence count, and correlation window
 function tosec(t,a){split(t,a,":"); return a[1]*3600+a[2]*60+a[3]}
 
-BEGIN {FS="|"; OFS="|"}
+BEGIN {
+    FS="|"
+    OFS="|"
+
+    FAILED_SSH_THRESHOLD=3
+    ACCEPTED_SSH_THRESHOLD=1
+    SUSPICIOUS_SUDO_THRESHOLD=1
+    CRON_PERSIST_THRESHOLD=1
+    CORRELATION_WINDOW_SECONDS=180
+}
 
 NR==1 {next}
 
@@ -99,7 +108,11 @@ END {
     c=(k in cron_persist ? cron_persist[k] : 0)
     window=last[k]-first[k]
 
-    if (f>=3 && ac>=1 && s>=1 && c>=1 && window<=180) {
+    if (f>=FAILED_SSH_THRESHOLD &&
+    ac>=ACCEPTED_SSH_THRESHOLD &&
+    s>=SUSPICIOUS_SUDO_THRESHOLD &&
+    c>=CRON_PERSIST_THRESHOLD &&
+    window<=CORRELATION_WINDOW_SECONDS) {
       print "HIGH_ALERT",a[1],a[2],"reason=SSH_BRUTE_FORCE_SUCCESS_PLUS_SUDO_CRON","source_ip=" a[3],"failed_ssh=" f,"accepted_ssh=" ac,"suspicious_sudo=" s,"cron_persistence=" c,"window_seconds=" window,"case=" a[4]
     }
   }
