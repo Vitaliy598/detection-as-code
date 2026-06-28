@@ -9,8 +9,28 @@ trap 'rm -f "$actual_file" "$expected_cases_file" "$result_file"' EXIT
 awk -f rules/cloud_identity_atomic.awk data/cloud_identity_events.psv |
 awk -f rules/cloud_identity_correlate.awk |
 awk -f rules/cloud_identity_tune.awk config/cloud_identity_trusted_forward.psv - |
-awk -F'|' 'BEGIN {OFS="|"} { print $2,$1 }' > "$actual_file"
+awk -F'|' '
+BEGIN { OFS="|" }
+{
+    case_name=""
+    alert=""
 
+    for (i=1; i<=NF; i++) {
+        if ($i ~ /^case_name=/) {
+            case_name=$i
+            sub(/^case_name=/, "", case_name)
+        }
+
+        if ($i ~ /^alert=/) {
+            alert=$i
+            sub(/^alert=/, "", alert)
+        }
+    }
+
+    if (case_name != "" && alert != "") {
+        print case_name, alert
+    }
+}' > "$actual_file"
 awk -F'|' 'NR>1 { print $1 }' data/cloud_identity_expected.psv > "$expected_cases_file"
 
 awk -F'|' 'BEGIN {OFS="|"}
