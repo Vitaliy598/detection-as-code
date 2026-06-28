@@ -51,8 +51,14 @@
 #   payload count, beacon count, correlation window, and recommended action
 function tosec(t,a){split(t,a,":"); return a[1]*3600+a[2]*60+a[3]}
 
-BEGIN {FS="|"; OFS="|"}
+BEGIN {
+    FS="|"
+    OFS="|"
 
+    PAYLOAD_DOWNLOAD_THRESHOLD=1
+    BEACON_THRESHOLD=3
+    CORRELATION_WINDOW_SECONDS=120
+}
 NR==1 {next}
 
 {
@@ -82,8 +88,22 @@ END {
     b=(k in beacon ? beacon[k] : 0)
     window=last[k]-first[k]
 
-    if (p>=1 && b>=3 && window<=120) {
-      print "HIGH_ALERT",a[1],a[2],"reason=PAYLOAD_DOWNLOAD_PLUS_BEACONING","domain=" a[3],"ip=" a[4],"window_seconds=" window,"payload_downloads=" p,"beacons=" b,"case=" a[5]
-    }
+    if (p>=PAYLOAD_DOWNLOAD_THRESHOLD &&
+    b>=BEACON_THRESHOLD &&
+    window<=CORRELATION_WINDOW_SECONDS) {
+
+    print "alert=HIGH_ALERT", \
+          "rule_id=NETWORK_PAYLOAD_BEACON_CORRELATION", \
+          "severity=high", \
+          "case_name=" a[1], \
+          "host=" a[2], \
+          "domain=" a[3], \
+          "destination_ip=" a[4], \
+          "reason=PAYLOAD_DOWNLOAD_PLUS_BEACONING", \
+          "payload_count=" p, \
+          "beacon_count=" b, \
+          "correlation_window_seconds=" window, \
+          "recommended_action=review_payload_source_validate_beaconing_and_isolate_host_if_confirmed"
+}
   }
 }
