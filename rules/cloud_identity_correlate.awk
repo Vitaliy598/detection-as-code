@@ -102,6 +102,13 @@ if (forward[key]) score+=EXTERNAL_FORWARD_RULE_SCORE
     if (score>=HIGH_ALERT_THRESHOLD) severity="HIGH_ALERT"
 else if (score>=MEDIUM_REVIEW_THRESHOLD) severity="MEDIUM_REVIEW"
 
-    print severity,case_name,user,src,"score=" score,signals[key]
-  }
+print "alert=" severity, \
+      "rule_id=CLOUD_IDENTITY_ABUSE_CORRELATION", \
+      "severity=" tolower(severity), \
+      "case_name=" case_name, \
+      "user=" user, \
+      "source_ip=" src, \
+      "risk_score=" score, \
+      "observed_signals=" signals[key], \
+      "recommended_action=review_signin_mfa_forwarding_and_validate_account_compromise"  }
 }
