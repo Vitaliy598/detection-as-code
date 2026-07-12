@@ -468,7 +468,9 @@ The strongest part of the project is not a single rule. The strongest part is th
 
 ## Scope
 
-This repository is a public portfolio project. It does not include:
+This repository is focused on detection logic, validation, documentation, and reviewability.
+
+Some areas are intentionally left for environment-specific deployment work:
 
 - live SIEM deployment;
 - production telemetry ingestion;
@@ -481,14 +483,11 @@ This repository is a public portfolio project. It does not include:
 - environment-specific suppression policy;
 - complete ATT&CK coverage.
 
-These areas are intentionally outside the scope of this repository.
-
----
-
+These areas are outside the scope of a public portfolio repository and would require a real deployment environment, production telemetry, operational ownership, and post-deployment monitoring.
 ## Portfolio positioning
 
-I use this project to demonstrate how I think about Detection Engineering work: rule logic, telemetry requirements, alert quality, validation, tuning, documentation, and reviewability.
+I use this project to demonstrate how I approach Detection Engineering work: rule logic, telemetry requirements, alert quality, validation, tuning, documentation, and reviewability.
 
-The repository is not presented as a deployed detection platform. It is a portfolio project that shows my approach to building and testing detection logic in a repeatable way.
+The repository shows a structured workflow for building and testing detection logic in a repeatable way. It is not presented as a deployed detection platform, but as a practical portfolio project focused on SOC investigation and SIEM-oriented detection engineering.
 
-My focus is SOC investigation, SIEM-oriented detection logic, behavioral correlation, false-positive analysis, and Detection-as-Code practices.
+My focus is SOC investigation, behavioral correlation, false-positive analysis, SIEM-oriented detection logic, and Detection-as-Code practices.
