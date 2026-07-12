@@ -1,8 +1,8 @@
 EvidenceID|Evidence|SourceArtifact|WhyItMatters
-EVID-001|HTTP payload.ps1 download|data/network_events.psv|Shows possible payload staging
-EVID-002|Three beacon requests|data/network_events.psv|Shows repeated callback behavior
+EVID-001|Successful remote download attributed to PowerShell|data/network_events.psv|Shows remote content retrieval by a script interpreter
+EVID-002|Three outbound connections to the same destination|data/network_events.psv|Shows repeated post-download network behavior
 EVID-003|Same Host/User/Domain/IP|rules/network_payload_beacon_correlation.awk|Confirms events belong to same entity chain
-EVID-004|85 second window|rules/network_payload_beacon_correlation.awk|Confirms beaconing happened shortly after payload download
+EVID-004|85 second window|rules/network_payload_beacon_correlation.awk|Confirms repeated connections followed the download within the threshold
 EVID-005|HIGH_ALERT result|tests/network_payload_beacon_test.sh|Confirms detection output matches expected result
 EVID-006|Review checklist passed|reviews/network_payload_beacon_review.psv|Confirms detection quality review passed
 EVID-007|KQL conversion exists|conversions/network_payload_beacon.kql|Shows rule can be used in Microsoft SIEM workflow

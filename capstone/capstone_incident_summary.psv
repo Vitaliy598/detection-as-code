@@ -1,14 +1,14 @@
 Field|Value
 IncidentID|CAPSTONE-001
-Scenario|Network payload download followed by beaconing
-PrimaryDetection|PAYLOAD_DOWNLOAD_PLUS_BEACONING
+Scenario|Script-interpreter download followed by repeated outbound connections
+PrimaryDetection|REMOTE_DOWNLOAD_PLUS_REPEATED_OUTBOUND_CONNECTIONS
 Severity|HIGH
 Host|win-22
 User|user1
-Domain|cdn-security-update.com
+Domain|cdn.example.test
 DestinationIP|203.0.113.88
-Evidence1|HTTP payload.ps1 download
-Evidence2|Three /beacon requests
+Evidence1|Successful remote download attributed to PowerShell
+Evidence2|Three repeated outbound connections to the same destination
 Evidence3|Same Host/User/Domain/IP
 Evidence4|Beaconing within 85 seconds
 LikelyThreat|Possible C2 staging or malware callback

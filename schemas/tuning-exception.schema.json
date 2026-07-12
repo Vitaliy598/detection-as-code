@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/detection-as-code/tuning-exception.schema.json",
+  "title": "Scoped detection tuning exception",
+  "type": "object",
+  "required": ["exception_id", "rule_id", "scope", "justification", "owner_role", "created", "expires", "rollback_condition", "test_reference"],
+  "properties": {
+    "exception_id": {"type": "string", "pattern": "^EXC-[0-9]{3}$"},
+    "rule_id": {"type": "string", "pattern": "^DET-[A-Z]+-[0-9]{3}$"},
+    "scope": {"type": "object", "minProperties": 1},
+    "justification": {"type": "string", "minLength": 10},
+    "expires": {"type": "string", "format": "date"}
+  }
+}

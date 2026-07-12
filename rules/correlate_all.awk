@@ -1,3 +1,7 @@
+# LEGACY DET-LINUX-001 correlation harness.
+# It consumes historical positional atomic signals and remains only for backward-
+# compatible regression comparison. Its final alert output follows the canonical
+# alert contract, but its input is not normalized synthetic telemetry.
 BEGIN {
   FS="|"
   OFS="|"
@@ -77,12 +81,25 @@ END {
     if (failed[key] >= 2 && success[key] && recon[key] >= 2)
       severity="HIGH_ALERT"
 
-    print severity,case_name[key],key,
-          (allow[allow_key[key]] ? "TRUSTED" : "UNTRUSTED"),
-          "score=" score,
-          "failed=" failed[key],
-          "success=" success[key],
-          "recon=" recon[key],
-          reasons
+    if (severity!="NO_ALERT") {
+      if (reasons=="") reasons="SSH_FAILURES,SSH_SUCCESS,PRIVILEGE_RECON,"
+      split(key, parts, "|")
+      risk=(severity=="HIGH_ALERT" ? 85 : 55)
+      normalized=(severity=="HIGH_ALERT" ? "high" : "medium")
+      print "schema_version=1.0",
+            "rule_id=DET-LINUX-001",
+            "rule_version=1.0.0",
+            "lifecycle_state=validation",
+            "severity=" normalized,
+            "risk_score=" risk,
+            "case_id=" case_name[key],
+            "host=" parts[1],
+            "user=" parts[2],
+            "source_ip=" parts[3],
+            "reason=LINUX_MULTI_SIGNAL_CORRELATION",
+            "observed_signals=" reasons,
+            "correlation_window_seconds=600",
+            "recommended_action=review_process_authentication_and_persistence_evidence"
+    }
   }
 }

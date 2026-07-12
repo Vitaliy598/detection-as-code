@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/detection-as-code/alert.schema.json",
+  "title": "Canonical detection alert",
+  "type": "object",
+  "required": ["schema_version", "rule_id", "rule_version", "lifecycle_state", "severity", "risk_score", "case_id", "reason", "observed_signals", "correlation_window_seconds", "recommended_action"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "rule_id": {"type": "string", "pattern": "^DET-[A-Z]+-[0-9]{3}$"},
+    "rule_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "lifecycle_state": {"enum": ["idea", "development", "experimental", "validation", "production_candidate", "tuning_required", "deprecated"]},
+    "severity": {"enum": ["low", "medium", "high", "critical"]},
+    "risk_score": {"type": "integer", "minimum": 0, "maximum": 100},
+    "case_id": {"type": "string", "minLength": 1},
+    "reason": {"type": "string", "minLength": 1},
+    "observed_signals": {"type": "string", "minLength": 1},
+    "correlation_window_seconds": {"type": "integer", "minimum": 0},
+    "recommended_action": {"type": "string", "minLength": 1}
+  }
+}

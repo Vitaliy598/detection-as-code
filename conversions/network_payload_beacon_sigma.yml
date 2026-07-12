@@ -1,32 +1,35 @@
-title: Network Payload Download Or Beacon Indicator
+title: Script Interpreter Download Or Repeated Outbound Connection Signal
 id: 9f0a7d2e-9c4a-4f41-9d7a-network-payload-beacon
 status: test
-description: Detects network indicators related to payload download or beaconing. Full correlation requires SIEM logic.
+description: Atomic normalized behaviors for DET-NET-001; sequence and threshold correlation require SIEM-native logic.
 author: Vitaliy
 date: 2026-06-24
+modified: 2026-07-12
 logsource:
   category: proxy
   product: network
 detection:
-  selection_payload:
-    url|contains:
-      - 'payload.ps1'
-  selection_beacon:
-    url|contains:
-      - '/beacon'
-  condition: selection_payload or selection_beacon
+  selection_download:
+    event.action: download
+    event.outcome: success
+    process.name:
+      - powershell.exe
+      - pwsh.exe
+  selection_outbound:
+    event.action: outbound_connect
+    event.outcome: success
+  condition: selection_download or selection_outbound
 fields:
   - host.name
   - user.name
-  - url.full
+  - process.name
   - url.domain
   - destination.ip
 falsepositives:
-  - Internal testing scripts
-  - Security tools downloading test payloads
-  - Monitoring systems using beacon-like paths
+  - Authorized script-based software retrieval
+  - Monitoring agents with frequent outbound status checks
 level: medium
 tags:
   - attack.command_and_control
   - attack.t1105
-  - attack.t1071
+  - attack.t1071.001

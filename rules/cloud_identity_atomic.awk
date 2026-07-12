@@ -1,32 +1,14 @@
-BEGIN {
-  FS="|"
-  OFS="|"
-}
-
+# Field-aware cloud signal normalization for DET-CLOUD-001.
+# Portable logic uses event_type/action/result/auth_method/rule_context.
+# rule_context is a lab stand-in for upstream identity risk enrichment.
+BEGIN { FS="|"; OFS="|" }
 NR==1 { next }
-
 {
-  time=$1
-  case_name=$2
-  user=$3
-  src=$4
-  country=$5
-  event=$6
-  result=$7
-  detail=$8
-
-  if (event=="LOGIN_FAILED")
-    print time,case_name,user,src,country,"FAILED_LOGIN",detail
-
-  if (event=="MFA_DENIED")
-    print time,case_name,user,src,country,"MFA_DENIED",detail
-
-  if (event=="MFA_APPROVED" && detail ~ /after denial/)
-    print time,case_name,user,src,country,"MFA_APPROVED_AFTER_DENIAL",detail
-
-  if (event=="LOGIN_SUCCESS" && detail ~ /new country|new IP/)
-    print time,case_name,user,src,country,"SUSPICIOUS_LOGIN_SUCCESS",detail
-
-  if (event=="INBOX_RULE_CREATED" && detail ~ /external/)
-    print time,case_name,user,src,country,"EXTERNAL_FORWARD_RULE",detail
+  signal=""
+  if ($3=="authentication" && $13=="login" && $14=="failure") signal="FAILED_LOGIN"
+  if ($3=="authentication" && $15=="mfa_push" && $14=="denied") signal="MFA_DENIED"
+  if ($3=="authentication" && $15=="mfa_push" && $14=="success") signal="MFA_APPROVED"
+  if ($3=="authentication" && $13=="login" && $14=="success" && $16 ~ /(^|,)(new_location|new_device)(,|$)/) signal="SUSPICIOUS_LOGIN_SUCCESS"
+  if ($3=="mailbox_rule" && $13=="external_forward" && $14=="success") signal="EXTERNAL_FORWARD_RULE"
+  if (signal!="") print $1,$2,$5,$6,$4,signal,$16
 }

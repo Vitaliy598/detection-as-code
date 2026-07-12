@@ -1,3 +1,6 @@
+# LEGACY DET-LINUX-001 atomic validation utility.
+# Retained for backward-compatible historical regression testing. This lexical,
+# positional input path is not part of the primary normalized telemetry contract.
 BEGIN {
   FS="|"
   OFS="|"

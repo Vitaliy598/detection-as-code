@@ -1,13 +1,18 @@
-id: DET-LINUX-001
+# Historical metadata snapshot for the legacy DET-LINUX-001 implementation.
+# This file is retained for comparison only. It is not a canonical manifest and
+# is excluded from metadata/DET-*.json validation. The canonical source of truth
+# is metadata/DET-LINUX-001.json.
+legacy: true
+canonical_manifest: metadata/DET-LINUX-001.json
+historical_id: DET-LINUX-001
 title: Linux Suspicious Fileless Execution
-status: experimental
+status: historical
 severity: high
 confidence: medium
 
 description: >
-  Detects suspicious Linux command patterns where remote content or encoded
-  content may be executed through shell interpreters without a traditional
-  saved executable payload.
+  Historical metadata for suspicious Linux command patterns where remote or
+  encoded content may be executed through shell interpreters.
 
 data_sources:
   - Linux process execution logs

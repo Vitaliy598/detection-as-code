@@ -23,7 +23,7 @@ done
 
 grep -q "IncidentID|CAPSTONE-001" capstone/capstone_incident_summary.psv
 grep -q "Severity|HIGH" capstone/capstone_incident_summary.psv
-grep -q "PrimaryDetection|PAYLOAD_DOWNLOAD_PLUS_BEACONING" capstone/capstone_incident_summary.psv
+grep -q "PrimaryDetection|REMOTE_DOWNLOAD_PLUS_REPEATED_OUTBOUND_CONNECTIONS" capstone/capstone_incident_summary.psv
 
 grep -q "EVID-001" capstone/capstone_evidence_matrix.psv
 grep -q "EVID-009" capstone/capstone_evidence_matrix.psv

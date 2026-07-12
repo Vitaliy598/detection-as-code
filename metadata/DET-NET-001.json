@@ -1,0 +1,13 @@
+{
+  "rule_id": "DET-NET-001", "title": "Remote download followed by repeated outbound connections", "version": "1.1.0", "status": "validation", "severity": "high", "risk_score": 85,
+  "risk_rationale": "Payload staging followed by repeated callbacks on the same entity chain is high-confidence suspicious behavior in the lab telemetry.",
+  "rule_path": "rules/network_payload_beacon_correlation.awk",
+  "required_telemetry": ["proxy HTTP events", "host and user identity", "destination domain and IP"],
+  "required_fields": ["event_time", "case_id", "event_type", "host", "user", "destination_ip", "process_name", "domain", "action", "result"],
+  "attack": [{"technique_id": "T1105", "confidence": "high", "rationale": "The payload URL is directly observed."}, {"technique_id": "T1071.001", "confidence": "medium", "rationale": "Repeated HTTP callbacks are observed; intent requires investigation."}],
+  "thresholds": {"payload_downloads": 1, "beacon_requests": 3, "window_seconds": 120},
+  "false_positive_hypotheses": ["software update workflow", "monitoring callback", "authorized security test"],
+  "tests": ["tests/network_payload_beacon_test.sh", "data/network_payload_beacon_expected.psv"],
+  "review": "reviews/network_payload_beacon_review.psv", "playbook": "docs/playbooks/network-payload-beacon.md",
+  "known_limitations": ["Process-to-network attribution depends on upstream normalization", "No TLS or full process-tree context", "Synthetic timestamps do not model timezone changes"]
+}

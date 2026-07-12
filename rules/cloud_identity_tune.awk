@@ -8,11 +8,11 @@
 # Expected trusted config format:
 #   user|source_ip|reason
 #
-# Expected alert input format:
-#   alert=...|rule_id=...|severity=...|case_name=...|user=...|source_ip=...|risk_score=...|observed_signals=...|recommended_action=...
+# Expected canonical alert input fields include:
+#   rule_id=...|severity=...|case_id=...|user=...|source_ip=...|risk_score=...|observed_signals=...|recommended_action=...
 #
 # Tuning logic:
-#   Only tune MEDIUM_REVIEW alerts to NO_ALERT when:
+#   Suppress only medium-severity review alerts when:
 #   - user and source IP match trusted forwarding config
 #   - the only observed signal is EXTERNAL_FORWARD_RULE
 #
@@ -33,10 +33,9 @@ FNR==NR {
 }
 
 {
-    alert=""
     rule_id=""
     severity=""
-    case_name=""
+    case_id=""
     user=""
     src=""
     risk_score=""
@@ -45,11 +44,6 @@ FNR==NR {
 
     for (i=1; i<=NF; i++) {
         field=$i
-
-        if (field ~ /^alert=/) {
-            alert=field
-            sub(/^alert=/, "", alert)
-        }
 
         if (field ~ /^rule_id=/) {
             rule_id=field
@@ -61,9 +55,9 @@ FNR==NR {
             sub(/^severity=/, "", severity)
         }
 
-        if (field ~ /^case_name=/) {
-            case_name=field
-            sub(/^case_name=/, "", case_name)
+        if (field ~ /^case_id=/) {
+            case_id=field
+            sub(/^case_id=/, "", case_id)
         }
 
         if (field ~ /^user=/) {
@@ -95,19 +89,9 @@ FNR==NR {
     key=user "|" src
 
     if (key in trusted &&
-        alert=="MEDIUM_REVIEW" &&
+        severity=="medium" &&
         observed_signals=="EXTERNAL_FORWARD_RULE,") {
-
-        print "alert=NO_ALERT", \
-              "rule_id=" rule_id, \
-              "severity=no_alert", \
-              "case_name=" case_name, \
-              "user=" user, \
-              "source_ip=" src, \
-              "risk_score=" risk_score, \
-              "observed_signals=" observed_signals, \
-              "tuned_reason=" trusted[key], \
-              "recommended_action=no_escalation_trusted_forwarding_rule"
+        next
 
     } else {
         print

@@ -1,0 +1,11 @@
+{
+  "rule_id": "DET-WIN-001", "title": "Suspicious PowerShell followed by remote download", "version": "1.1.0", "status": "validation", "severity": "high", "risk_score": 80,
+  "risk_rationale": "Suspicious PowerShell controls and a related remote download materially increase execution risk.", "rule_path": "rules/siem_ps_download_correlation.awk",
+  "required_telemetry": ["Windows process creation", "full command line", "parent process", "network destination"],
+  "required_fields": ["event_time", "case_id", "event_type", "host", "user", "destination_ip", "process_name", "parent_process_name", "action", "result", "rule_context"],
+  "attack": [{"technique_id": "T1059.001", "confidence": "high", "rationale": "PowerShell execution is directly observed."}, {"technique_id": "T1105", "confidence": "medium", "rationale": "A remote payload download is observed."}],
+  "thresholds": {"powershell_events": 2, "downloads": 1, "window_seconds": 600},
+  "false_positive_hypotheses": ["administrative automation", "software deployment", "authorized security test"],
+  "tests": ["tests/siem_ps_download_test.sh", "data/siem_ps_download_expected.psv"], "review": "docs/reviewer-workflow.md", "playbook": "docs/playbooks/powershell-download.md",
+  "known_limitations": ["rule_context classifications require an upstream parser", "No signature or hash context", "No SIEM-native sequence execution"]
+}
