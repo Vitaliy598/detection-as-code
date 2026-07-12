@@ -1,4 +1,4 @@
-# Capstone Incident Report: Network Payload Download + Beaconing
+# Capstone Incident Report: Remote Download + Repeated Outbound Connections
 
 ## Incident Summary
 
@@ -6,7 +6,7 @@
 - Severity: HIGH
 - Host: win-22
 - User: user1
-- Domain: cdn-security-update.com
+- Domain: cdn.example.test
 - Destination IP: 203.0.113.88
 - Detection: PAYLOAD_DOWNLOAD_PLUS_BEACONING
 
@@ -14,14 +14,14 @@
 
 Confirmed suspicious network behavior.
 
-The evidence shows an HTTP payload download followed by repeated beacon-style requests from the same host, user, domain, and destination IP within a short time window.
+The normalized evidence shows a successful remote download attributed to PowerShell followed by repeated outbound connections from the same host, user, domain, and destination IP within a short time window.
 
 ## Evidence
 
 | Evidence | Source | Meaning |
 |---|---|---|
-| HTTP payload.ps1 download | data/network_events.psv | Possible payload staging |
-| Three /beacon requests | data/network_events.psv | Repeated callback behavior |
+| PowerShell-attributed remote download | data/network_events.psv | Possible remote content staging |
+| Three outbound connections | data/network_events.psv | Repeated post-download network behavior |
 | Same Host/User/Domain/IP | rules/network_payload_beacon_correlation.awk | Events belong to one entity chain |
 | 85 second window | rules/network_payload_beacon_correlation.awk | Beaconing happened shortly after payload download |
 | HIGH_ALERT result | tests/network_payload_beacon_test.sh | Detection matched expected result |
@@ -29,14 +29,14 @@ The evidence shows an HTTP payload download followed by repeated beacon-style re
 
 ## Why This Matters
 
-A payload download followed by repeated beaconing can indicate possible C2 staging or malware callback behavior.
+A script-interpreter download followed by repeated outbound connections can indicate staging or callback behavior, but the normalized sequence alone does not prove malicious intent.
 
 C2 means Command and Control: attacker-controlled infrastructure used to communicate with a compromised host.
 
 ## Recommended Actions
 
 1. Isolate host win-22.
-2. Block destination IP 203.0.113.88 and domain cdn-security-update.com.
+2. Block destination IP 203.0.113.88 and domain cdn.example.test if environment-owner validation confirms malicious activity.
 3. Collect EDR process and network timeline.
 4. Check whether payload.ps1 executed.
 5. Check persistence locations such as scheduled tasks, services, registry run keys, and startup folders.
@@ -49,7 +49,7 @@ C2 means Command and Control: attacker-controlled infrastructure used to communi
 - Attack case produced HIGH_ALERT.
 - Review checklist passed.
 - KQL and Splunk conversion files exist.
-- Sigma atomic indicators exist.
+- Sigma normalized atomic behaviors exist; full sequence correlation remains SIEM-specific.
 
 ## Limitations
 

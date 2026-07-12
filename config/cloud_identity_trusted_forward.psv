@@ -1,2 +1,2 @@
 User|SourceIP|Reason
-service@company.com|10.0.0.40|approved external forwarding business workflow
+service@company.test|10.0.0.40|approved external forwarding business workflow

@@ -1,11 +1,13 @@
-Technique|Case|CoverageStatus|DetectionRule|Tested|Notes
-Command and Scripting Interpreter|FILELESS|COVERED|DET-LINUX-001|yes|curl pipe-to-shell detected
-Command and Scripting Interpreter|COMMAND_SUBSTITUTION|COVERED|DET-LINUX-001|yes|bash command substitution detected
-Obfuscated Files or Information|ENCODED_FILELESS|COVERED|DET-LINUX-001|yes|encoded execution detected
-Persistence|ATTACK|COVERED|DET-LINUX-001|yes|cron persistence correlated
-Persistence|EVASION|COVERED|DET-LINUX-001|yes|profile persistence correlated
-Valid Accounts|TRUSTED_COMPROMISE|COVERED|auth-correlation|yes|trusted account compromise detected
-Approved Remote Script|BENIGN_REMOTE_SCRIPT|COVERED|tuning|yes|benign remote script handled
-Endpoint EDR Compromise|EDR_COMPROMISE|NOT_COVERED|none|no|requires EDR-specific detection
-Container Escape|CONTAINER_ESCAPE|NOT_COVERED|none|no|future Linux/container module
-Cloud Identity Abuse|CLOUD_IDENTITY_ABUSE|NOT_COVERED|none|no|future cloud identity module
+RuleID|ATTACKTechnique|AttackCoverage|DetectionCoverage|TelemetryAvailability|FieldAvailability|TestCoverage|KnownBlindSpot
+DET-NET-001|T1105|full|partial|partial|full|full|No process ancestry or payload hash
+DET-NET-001|T1071.001|indirect|partial|partial|full|full|Repeated HTTP paths do not establish C2 intent
+DET-WIN-001|T1059.001|full|partial|partial|full|full|Encoded content is not decoded
+DET-WIN-001|T1105|partial|partial|partial|full|full|No file hash or execution confirmation
+DET-LINUX-002|T1110|full|partial|partial|full|full|No identity or source reputation enrichment
+DET-LINUX-002|T1053.003|full|partial|partial|full|full|Cron content is matched lexically
+DET-LINUX-001|T1059.004|full|partial|partial|full|full|Command matching is lexical
+DET-LINUX-001|T1053.003|indirect|partial|partial|full|full|Fixed time buckets may split boundary events
+DET-CLOUD-001|T1621|full|partial|partial|full|full|No device compliance or session risk
+DET-CLOUD-001|T1114.003|full|partial|partial|full|full|External destination is inferred from fixture detail
+GAP-ENDPOINT|N/A|not_covered|not_covered|not_covered|not_covered|not_covered|EDR compromise and sensor tampering
+GAP-CONTAINER|N/A|not_covered|not_covered|not_covered|not_covered|not_covered|Container escape telemetry

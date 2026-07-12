@@ -1,0 +1,11 @@
+{
+  "rule_id": "DET-CLOUD-001", "title": "Cloud identity abuse correlation", "version": "1.1.0", "status": "validation", "severity": "high", "risk_score": 100,
+  "risk_rationale": "MFA abuse, suspicious login and external forwarding collectively indicate likely account compromise.", "rule_path": "rules/cloud_identity_correlate.awk",
+  "required_telemetry": ["identity sign-ins", "MFA events", "mailbox rule audit"],
+  "required_fields": ["event_time", "case_id", "event_type", "host", "user", "source_ip", "action", "result", "auth_method", "rule_context"],
+  "attack": [{"technique_id": "T1621", "confidence": "high", "rationale": "MFA denial and approval sequence is directly observed."}, {"technique_id": "T1114.003", "confidence": "high", "rationale": "External forwarding creation is directly observed."}],
+  "thresholds": {"medium_score": 4, "high_score": 8},
+  "false_positive_hypotheses": ["business travel", "approved forwarding", "identity automation"],
+  "tests": ["tests/cloud_identity_test.sh", "data/cloud_identity_expected.psv"], "review": "docs/reviewer-workflow.md", "playbook": "playbooks/cloud_identity_abuse_triage.md",
+  "known_limitations": ["Score weights are lab assumptions", "rule_context enrichment is synthetic", "No device compliance or IP reputation"]
+}

@@ -1,3 +1,6 @@
+# LEGACY DET-LINUX-001 authentication signal utility.
+# Retained for backward-compatible historical regression testing and not used by
+# the four primary normalized correlation packages.
 BEGIN {
   FS="|"
   OFS="|"

@@ -1,0 +1,11 @@
+{
+  "rule_id": "DET-LINUX-002", "title": "SSH brute force followed by sudo and cron persistence", "version": "1.1.0", "status": "validation", "severity": "high", "risk_score": 90,
+  "risk_rationale": "Authentication abuse, privileged execution and persistence in one entity chain warrant high severity.", "rule_path": "rules/linux_ssh_sudo_cron_correlation.awk",
+  "required_telemetry": ["Linux authentication", "sudo execution", "cron modification"],
+  "required_fields": ["event_time", "case_id", "event_type", "host", "user", "source_ip", "process_name", "action", "result", "auth_method"],
+  "attack": [{"technique_id": "T1110", "confidence": "high", "rationale": "Repeated authentication failures are directly observed."}, {"technique_id": "T1053.003", "confidence": "high", "rationale": "Suspicious cron creation is directly observed."}],
+  "thresholds": {"failed_logins": 3, "successful_logins": 1, "sudo_events": 1, "cron_events": 1, "window_seconds": 180},
+  "false_positive_hypotheses": ["approved maintenance", "deployment automation", "administrator recovery"],
+  "tests": ["tests/linux_ssh_sudo_cron_test.sh", "data/linux_ssh_sudo_cron_expected.psv"], "review": "docs/reviewer-workflow.md", "playbook": "docs/playbooks/linux-ssh-persistence.md",
+  "known_limitations": ["Session identity is represented by a fixture case_id", "Normalized event types depend on source parsing", "No process ancestry or PAM session identifier"]
+}

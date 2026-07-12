@@ -1,0 +1,12 @@
+{
+  "rule_id": "DET-LINUX-001", "title": "Legacy Linux atomic execution and persistence validation", "version": "1.0.0", "status": "validation", "severity": "high", "risk_score": 85,
+  "implementation_profile": "legacy_atomic_regression", "canonical_record": true,
+  "risk_rationale": "Delivery, execution, suspicious context and persistence in one entity window represent material compromise risk.", "rule_path": "rules/correlate_all.awk",
+  "required_telemetry": ["Linux process execution", "authentication activity", "command line"],
+  "required_fields": ["LegacyTime", "LegacyCaseID", "Host", "User", "SourceIP", "Command", "LegacyContext"],
+  "attack": [{"technique_id": "T1059.004", "confidence": "high", "rationale": "Unix shell execution is directly observed."}, {"technique_id": "T1053.003", "confidence": "medium", "rationale": "Persistence tokens are observed in command lines."}],
+  "thresholds": {"window_seconds": 600, "high_score": 8},
+  "false_positive_hypotheses": ["approved remote administration", "software deployment", "maintenance automation"],
+  "tests": ["tests/legacy_regression_expected.psv", "tests/validate_detection_output.py"], "review": "docs/reviewer-workflow.md", "playbook": "docs/playbooks/linux-ssh-persistence.md",
+  "known_limitations": ["Historical example outside the normalized synthetic telemetry contract", "Lexical command matching", "Fixed ten-minute buckets can split boundary events", "Lab context fields replace production enrichment"]
+}

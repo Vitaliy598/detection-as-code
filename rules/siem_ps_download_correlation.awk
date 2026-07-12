@@ -1,115 +1,33 @@
-# Rule: Suspicious PowerShell execution followed by remote payload download
-# Category: Correlation detection
-# Level: Middle SOC / Detection Engineering
-# Severity: High
-#
-# Purpose:
-#   Detect suspicious PowerShell execution patterns followed by remote payload
-#   download activity within a defined correlation window.
-#
-# Data sources:
-#   - Windows process creation logs
-#   - EDR process telemetry
-#   - Command-line logging
-#   - Network/process connection telemetry
-#
-# Expected input format:
-#   time|case_name|host|process_name|command_line|parent_process|remote_ip|user
-#
-# Detection logic:
-#   1. Identify suspicious PowerShell execution using EncodedCommand or ExecutionPolicy Bypass.
-#   2. Identify curl-based remote payload download activity.
-#   3. Correlate both behaviors by case and host.
-#   4. Raise HIGH_ALERT when suspicious PowerShell and download activity occur within the configured window.
-#
-# Default thresholds:
-#   - suspicious PowerShell events: >= 2
-#   - curl download events: >= 1
-#   - correlation window: <= 600 seconds
-#
-# MITRE ATT&CK mapping:
-#   - T1059.001: PowerShell
-#   - T1027: Obfuscated Files or Information
-#   - T1105: Ingress Tool Transfer
-#   - T1204: User Execution
-#   - T1059: Command and Scripting Interpreter
-#
-# False positives:
-#   - administrator troubleshooting scripts
-#   - software deployment automation
-#   - internal security testing
-#   - approved PowerShell-based maintenance
-#
-# Tuning notes:
-#   - validate parent process and user context
-#   - review remote IP reputation
-#   - avoid broad allowlisting of EncodedCommand
-#   - approved admin scripts should be tuned by hash/path/user context, not by process name alone
-#
-# Output:
-#   alert level, rule_id, severity, case_name, host, remote_ip,
-#   PowerShell event count, curl download count, correlation window, and recommended action
-BEGIN {
-    FS="|"
-    OFS="|"
-
-    POWERSHELL_EVENT_THRESHOLD=2
-    CURL_DOWNLOAD_THRESHOLD=1
-    CORRELATION_WINDOW_SECONDS=600
-}
-
-function to_sec(t, a) {
-  split(t,a,":")
-  return a[1]*3600 + a[2]*60 + a[3]
-}
-
+# DET-WIN-001: suspicious PowerShell behavior followed by remote download.
+# Required normalized fields: event_time, case_id, event_type, host, user,
+# process_name, parent_process_name, action, result and rule_context.
+# Portable behavior: suspicious interpreter execution plus a successful download
+# attributed to that interpreter. Lab simplification: rule_context represents an
+# upstream parser classification; production mappings must validate its source.
+function tosec(t,a){split(substr(t,12,8),a,":"); return a[1]*3600+a[2]*60+a[3]}
+BEGIN { FS="|"; OFS="|"; POWERSHELL_THRESHOLD=2; DOWNLOAD_THRESHOLD=1; CORRELATION_WINDOW_SECONDS=600 }
 NR==1 { next }
-
 {
-  key=$2 "|" $3
-  ts=to_sec($1)
+  key=$2 "|" $4 "|" $5; ts=tosec($1)
+  is_ps=($8 ~ /^(powershell|pwsh)(\.exe)?$/)
+  parent_is_ps=($9 ~ /^(powershell|pwsh)(\.exe)?$/)
+  if ($3=="process_start" && $13=="execute" && $14=="success" && is_ps && $16 ~ /(^|,)(encoded_command|policy_bypass)(,|$)/) {
+    ps[key]++; touch[key]=1
+  }
+  if ($3=="network_connection" && $13=="download" && $14=="success" && parent_is_ps && $7!="-") {
+    download[key]++; remote[key]=$7; touch[key]=1
+  }
+  if (key in touch) {
+    if (!(key in first) || ts<first[key]) first[key]=ts
+    if (!(key in last) || ts>last[key]) last[key]=ts
+  }
 }
-
-$4=="powershell.exe" && $5 ~ /EncodedCommand|ExecutionPolicy Bypass/ {
-  ps[key]++
-  if (!(key in first_ts) || ts < first_ts[key]) first_ts[key]=ts
-  if (!(key in last_ts) || ts > last_ts[key]) last_ts[key]=ts
-  cases[key]=$8
-}
-
-$4=="curl.exe" && $5 ~ /http|https|payload|\.ps1/ {
-  curl[key]++
-  if (!(key in first_ts) || ts < first_ts[key]) first_ts[key]=ts
-  if (!(key in last_ts) || ts > last_ts[key]) last_ts[key]=ts
-  remote[key]=$7
-}
-
 END {
   for (key in ps) {
-    window=last_ts[key]-first_ts[key]
-
-    if (key in curl &&
-    ps[key] >= POWERSHELL_EVENT_THRESHOLD &&
-    curl[key] >= CURL_DOWNLOAD_THRESHOLD &&
-    window <= CORRELATION_WINDOW_SECONDS) {
-
-    split(key, parts, "|")
-case_name=parts[1]
-host=parts[2]
-user=cases[key]
-
-    print "alert=HIGH_ALERT", \
-          "rule_id=SIEM_POWERSHELL_DOWNLOAD_CORRELATION", \
-          "severity=high", \
-          "case_name=" case_name, \
-          "host=" host, \
-"user=" user, \
-          "remote_ip=" remote[key], \
-          "reason=SUSPICIOUS_POWERSHELL_PLUS_REMOTE_DOWNLOAD", \
-          "powershell_events=" ps[key], \
-          "curl_downloads=" curl[key], \
-          "correlation_window_seconds=" window, \
-          "recommended_action=review_command_line_parent_process_remote_ip_and_contain_host_if_confirmed"
-}
+    window=last[key]-first[key]
+    if (ps[key]>=POWERSHELL_THRESHOLD && download[key]>=DOWNLOAD_THRESHOLD && window<=CORRELATION_WINDOW_SECONDS) {
+      split(key,a,"|")
+      print "schema_version=1.0", "rule_id=DET-WIN-001", "rule_version=1.1.0", "lifecycle_state=validation", "severity=high", "risk_score=80", "case_id=" a[1], "host=" a[2], "user=" a[3], "remote_ip=" remote[key], "reason=SUSPICIOUS_POWERSHELL_PLUS_REMOTE_DOWNLOAD", "observed_signals=SUSPICIOUS_SCRIPT_INTERPRETER,REMOTE_DOWNLOAD", "powershell_events=" ps[key], "download_events=" download[key], "correlation_window_seconds=" window, "recommended_action=review_command_line_parent_process_remote_ip_and_execution_chain"
+    }
   }
 }

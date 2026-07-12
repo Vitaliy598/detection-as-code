@@ -1,10 +1,11 @@
 // Network payload download + beaconing correlation
 // Purpose: detect possible C2/staging behavior
-// Logic: payload.ps1 download + >=3 beacon requests by same host/user/domain/IP within 120 seconds after payload download
+// Logic: successful script-interpreter download + >=3 outbound connections by the same entity within 120 seconds
 
 let PayloadEvents =
 NetworkEvents
-| where URL has "payload.ps1"
+| where Action == "download" and Result == "success"
+| where ProcessName in~ ("powershell.exe", "pwsh.exe")
 | project
     PayloadTime = TimeGenerated,
     DeviceName,
@@ -15,7 +16,7 @@ NetworkEvents
 
 let BeaconEvents =
 NetworkEvents
-| where URL has "/beacon"
+| where Action == "outbound_connect" and Result == "success"
 | project
     BeaconTime = TimeGenerated,
     DeviceName,

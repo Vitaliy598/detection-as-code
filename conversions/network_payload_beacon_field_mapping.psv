@@ -1,11 +1,15 @@
-Concept|LabField|SigmaField|KQLField|SplunkField|Meaning
-timestamp|Time|@timestamp|TimeGenerated|_time|event time
-host|Host|host.name|DeviceName|host|device name
-user|User|user.name|AccountName|user|account/user
-event_type|EventType|event.category|EventType|event_type|DNS or HTTP event
-domain|Domain|dns.question.name / url.domain|RemoteUrl|url_domain|requested domain
-destination_ip|DestinationIP|destination.ip|RemoteIP|dest_ip|external destination IP
-url|URL|url.full|RemoteUrl|url|full requested URL
-bytes_out|BytesOut|source.bytes|SentBytes|bytes_out|bytes sent from host
-bytes_in|BytesIn|destination.bytes|ReceivedBytes|bytes_in|bytes received by host
-case|Case|test.case|Case|case|lab expected case
+Concept|NormalizedField|SigmaField|KQLField|SplunkField|Meaning
+timestamp|event_time|@timestamp|TimeGenerated|_time|event time
+case_trace|case_id|test.case|CaseId|case_id|fixture-only test trace
+event_type|event_type|event.category|EventType|event_type|normalized event family
+host|host|host.name|DeviceName|host|device identity
+user|user|user.name|AccountName|user|account identity
+source_ip|source_ip|source.ip|LocalIP|src_ip|origin address
+destination_ip|destination_ip|destination.ip|RemoteIP|dest_ip|remote address
+process|process_name|process.name|InitiatingProcessFileName|process_name|attributed process
+parent_process|parent_process_name|process.parent.name|InitiatingProcessParentFileName|parent_process_name|parent process
+url|url|url.full|RemoteUrl|url|full request URL
+domain|domain|url.domain|RemoteUrl|url_domain|normalized destination domain
+action|action|event.action|ActionType|action|normalized behavior action
+result|result|event.outcome|ActionResult|result|normalized outcome
+context|rule_context|labels.rule_context|RuleContext|rule_context|upstream classification or enrichment

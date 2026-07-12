@@ -1,13 +1,13 @@
 # Network payload download + beaconing correlation
 # Purpose: detect possible C2/staging behavior
-# Logic: payload.ps1 download + >=3 beacon requests by same host/user/domain/IP within 120 seconds after payload download
+# Logic: successful script-interpreter download + >=3 outbound connections by the same entity within 120 seconds
 
-index=network sourcetype=proxy url="*payload.ps1*"
+index=network sourcetype=proxy action=download result=success process_name IN (powershell.exe,pwsh.exe)
 | eval payload_time=_time
 | rename url as payload_url
 | fields payload_time payload_url host user url_domain dest_ip
 | join type=inner host user url_domain dest_ip [
-    search index=network sourcetype=proxy url="*/beacon*"
+    search index=network sourcetype=proxy action=outbound_connect result=success
     | eval beacon_time=_time
     | rename url as beacon_url
     | fields beacon_time beacon_url host user url_domain dest_ip

@@ -1,0 +1,18 @@
+[
+  {
+    "exception_id": "EXC-001", "rule_id": "DET-CLOUD-001",
+    "scope": {"user": "service@company.test", "source_ip": "10.0.0.40", "signal": "EXTERNAL_FORWARD_RULE"},
+    "justification": "Approved external forwarding workflow; multi-signal chains remain alertable.",
+    "owner_role": "Detection maintainer", "created": "2026-06-24", "expires": "2026-12-24",
+    "rollback_condition": "Unexpected identity signals or business approval withdrawal",
+    "test_reference": "BENIGN_APPROVED_EXTERNAL_FORWARD"
+  },
+  {
+    "exception_id": "EXC-002", "rule_id": "DET-LINUX-001",
+    "scope": {"case_id": "BENIGN_PERSISTENCE", "host": "linux-dev-03", "user": "developer", "source_ip": "10.0.0.70"},
+    "justification": "Lab fixture models an approved persistence change while retaining analyst review.",
+    "owner_role": "Detection maintainer", "created": "2026-06-24", "expires": "2026-12-24",
+    "rollback_condition": "Entity scope changes or additional suspicious signals appear",
+    "test_reference": "BENIGN_PERSISTENCE"
+  }
+]
